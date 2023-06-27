@@ -1,0 +1,33 @@
+{
+  "balances": [
+    {
+      "id": "1",
+      "name": "Name 1",
+      "balance": "$100"
+    },
+    {
+      "id": "2",
+      "name": "Name 2",
+      "balance": "$100"
+    },
+    {
+      "id": "3",
+      "name": "Name 3",
+      "balance": "$100"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "balanceId": "1",
+      "type": "CREDIT",
+      "ammount": "1000"
+    },
+    {
+      "id": "2",
+      "balanceId": "2",
+      "type": "CREDIT",
+      "ammount": "1000"
+    }
+  ]
+}
