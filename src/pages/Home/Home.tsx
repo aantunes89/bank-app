@@ -1,58 +1,38 @@
-import { useEffect, useState } from "react";
-import { api } from "../../services/api";
 import { AccountDetails } from "../../types/AccountDetails";
-import { Transactions } from "../../types/Transactions";
 import Account from "../../components/Account/Account";
 import { Grid } from "@mui/material";
+import { useGetAccountsQuery } from "../../store/slices/accounts";
+import { useGetTransactionsQuery } from "../../store/slices/transactions";
+import { useEffect, useState } from "react";
+import { Transactions } from "../../types/Transactions";
 
 const Home = () => {
   const [accountDetails, setAccountDetails] = useState<AccountDetails[]>([]);
 
-  //   async function loadInfo<Type>(route: string): Promise<Type> {
-  //     const { data } = await api.get(`/${route}`);
-  //     return data;
-  //   }
+  const { data: accDetails } = useGetAccountsQuery<{ data: AccountDetails[] }>(
+    "balances"
+  );
+
+  const { data: transactionsDetails } = useGetTransactionsQuery<{
+    data: Transactions[];
+  }>("transactions");
 
   useEffect(() => {
-    // const loadAll = async (): Promise<void> => {
-    //   const [accountData, transactionsData] = (await Promise.all([
-    //     loadInfo<AccountDetails[]>("balances"),
-    //     loadInfo<Transactions[]>("transactions"),
-    //   ])) as [AccountDetails[], Transactions[]];
+    const newAccountDetails = accDetails?.map(({ id, ...acc }) => {
+      const transactions = transactionsDetails?.filter(
+        ({ balanceId }) => balanceId === id
+      );
 
-    //   const formattedAccountData = accountData.map(
-    //     ({ id, ...account }): AccountDetails => {
-    //       const transactions =
-    //         transactionsData.filter(({ balanceId }) => balanceId === id) ?? [];
+      return transactions ? { ...acc, id, transactions } : { ...acc, id };
+    });
 
-    //       return { id, ...account, transactions };
-    //     }
-    //   );
-
-    //   setAccountDetails(formattedAccountData);
-    // };
-
-    const loadAccountDetails = async () => {
-      const { data: accDetails } = await api.get("/balances");
-      setAccountDetails(accDetails);
-    };
-
-    try {
-      loadAccountDetails();
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+    setAccountDetails(newAccountDetails);
+  }, [accDetails, transactionsDetails]);
 
   const renderBalances = (accountDetails: AccountDetails[]) =>
-    accountDetails.map((details) => (
+    accountDetails?.map((details) => (
       <Account key={details.id} details={details} />
     ));
-
-  /*
-        - Criar o componente Accounts
-        - Passar o balance como props
-    */
 
   return <Grid>{renderBalances(accountDetails)}</Grid>;
 };

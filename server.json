@@ -28,6 +28,24 @@
       "balanceId": "2",
       "type": "CREDIT",
       "ammount": "1000"
+    },
+    {
+      "id": "3",
+      "balanceId": "3",
+      "type": "DEBIT",
+      "ammount": "500"
+    },
+    {
+      "id": "4",
+      "balanceId": "1",
+      "type": "DEBIT",
+      "ammount": "200"
+    },
+    {
+      "id": "5",
+      "balanceId": "1",
+      "type": "DEBIT",
+      "ammount": "3200"
     }
   ]
 }

@@ -11,21 +11,17 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { TransactionsTypes } from "../../utils/TransactionsTypes.enum";
 
 interface AccountProps {
   details: AccountDetails;
-  getAccountDetails?: () => AccountDetails;
 }
 
 const Account = (props: AccountProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClick = () => {
-    setOpen(!open);
-    // retornar callback ativar estado para buscar transactions por id
-  };
+  const handleClick = () => setOpen(!open);
 
   return (
     <List
@@ -46,10 +42,10 @@ const Account = (props: AccountProps) => {
 
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            {props.details.transactions?.map(({ ammount, type, balanceId }) => (
-              <ListItemIcon key={balanceId}>
-                <Grid container>
+          <ListItemButton sx={{ pl: 4, display: "block" }}>
+            {props.details.transactions?.map(({ ammount, type, id }) => (
+              <ListItemIcon key={id} sx={{ display: "block", width: "100%" }}>
+                <Box sx={{ display: "flex", alignItems: "center", p: 1 }}>
                   <MonetizationOnSharpIcon
                     sx={{
                       marginRight: ".4rem",
@@ -57,8 +53,10 @@ const Account = (props: AccountProps) => {
                         type === TransactionsTypes.CREDIT ? "green" : "red",
                     }}
                   />
-                  <ListItemText primary={`${type} - ${ammount}`} />
-                </Grid>
+                  <ListItemText
+                    primary={`${type.toLowerCase()} - ${ammount}`}
+                  />
+                </Box>
               </ListItemIcon>
             ))}
           </ListItemButton>
